@@ -5,7 +5,7 @@ namespace Striker\PerfectWorldAPI;
 /**
  * Class API
  *
- * @package Striker/pw-api
+ * @package ham/pw-api
  */
 class API
 {
@@ -22,7 +22,7 @@ class API
         $this->online = $this->serverOnline();
 
         // Check if there is a protocol file for the set game version
-        $version = settings( 'server_version', '101' );
+        $version = settings( 'server_version', '156' );
 
         if ( file_exists( __DIR__ . '/../../protocols/pw_v' . $version . '.php' ) )
         {
@@ -51,7 +51,6 @@ class API
             $user['base'] = $this->getRoleBase($role);
             $user['status'] = $this->getRoleStatus($role);
             $user['pocket'] = $this->getRoleInventory($role);
-            //$user['pets'] = $this->getRolePetBadge($role);
             $user['equipment'] = $this->getRoleEquipment($role);
             $user['storehouse'] = $this->getRoleStoreHouse($role);
             $user['task'] = $this->getRoleTask($role);
@@ -69,7 +68,6 @@ class API
                 $user['base'] = $this->getRoleBase($role);
                 $user['status'] = $this->getRoleStatus($role);
                 $user['pocket'] = $this->getRoleInventory($role);
-                //$user['pets'] = $this->getRolePetBadge($role);
                 $user['equipment'] = $this->getRoleEquipment($role);
                 $user['storehouse'] = $this->getRoleStoreHouse($role);
                 $user['task'] = $this->getRoleTask($role);
@@ -157,20 +155,43 @@ class API
     }
 
     /**
-     * Returns the array of role data by structure
-     * @params string $role
+     * Return amount of cash user
+     * @params int $userid
      * @return array
      */
-    public function getJdRole($role)
+    public function getUserCash($userid)
     {
-        /*$pack = pack("N*", -1, $role);
-        $pack = $this->gamed->createHeader(config('code.getRole'), $pack);
+        $pack = pack("N*", -1, $userid);
+        $pack = $this->gamed->createHeader($this->data['code']['GetCashTotal'], $pack);
         $send = $this->gamed->SendToGamedBD($pack);
         $data = $this->gamed->deleteHeader($send);
-        $user = $this->gamed->unmarshal($data, config('role'));
+        $user = $this->gamed->unmarshal($data, $this->data['getCashTotal']);
 
-        return $user;*/
+        return $user;
     }
+
+    /**
+     * Return pvp data from role
+     * @params string $var_data
+     * @return array
+     */
+    public function getRolePvp($var_data = '')
+    {
+        $result = array(
+            'pk_count' => 0,
+            'dead_flag' => 0
+        );
+        if ($var_data !== '')
+        {
+            $data = $this->parseOctet($var_data, 'var_data');
+            $result = array(
+                'pk_count' => $data['pk_count'],
+                'dead_flag' => $data['dead_flag']
+            );
+        }
+        return $result;
+    }
+
 
     /**
      * Returns the array of user roles by structure
@@ -213,19 +234,6 @@ class API
         $user['login_time'] = $this->gamed->getTime(substr($user['login_record'], 0, 8));
 
         return $user;
-    }
-
-    /**
-     * Returns the array of user data by structure
-     * @params string $user
-     * @return array
-     */
-    public function getJdUser($id)
-    {
-        /*$pack = pack("N*", -1, $id);
-        $data = $this->gamed->SendToGamedBD($this->gamed->createHeader(config('code.getUser'), $pack));
-        $send = $this->gamed->SendToGamedBD($data);
-        return $this->gamed->unmarshal($data, config('user.info'));*/
     }
 
     /**
@@ -294,20 +302,6 @@ class API
 
             return $this->gamed->SendToGamedBD( $this->gamed->createHeader( $this->data['code']['putRoleTask'], $pack ) );
         }
-    }
-
-    /**
-     * Saves a data of character by structure
-     * @params string $role
-     * @params array $params
-     * @return boolean
-     */
-    public function putJdRole($role, $params)
-    {
-        /*$pack = pack("NNC*", -1, $role, 1).$this->gamed->marshal($params, config('role'));
-        $this->gamed->SendToGamedBD($this->gamed->createHeader(config('code.putRole'), $pack));
-
-        return true;*/
     }
 
     /**
@@ -510,6 +504,11 @@ class API
         return $this->gamed->SendToGamedBD($pack);
     }
 
+    /**
+     * Get faction information from role
+     * @params int $roleid
+     * @return array
+     */
     public function getFactionInfo($id)
     {
         $pack = pack("N*", -1, $id);
@@ -519,6 +518,11 @@ class API
         return $this->gamed->unmarshal($data, $this->data['FactionInfo']);
     }
 
+    /**
+     * Get faction information from role
+     * @params int $roleid
+     * @return array
+     */
     public function getFactionDetail($id)
     {
         $pack = pack("N*", -1, $id);
@@ -526,15 +530,6 @@ class API
         $send = $this->gamed->SendToGamedBD($pack);
         $data = $this->gamed->deleteHeader($send);
         return $this->gamed->unmarshal($data, $this->data['FactionDetail']);
-    }
-
-    public function getFactionFortressDetail($id)
-    {
-        /*$pack = pack("N*", -1, $id);
-        $pack = $this->gamed->createHeader(config('code.GFactionFortressDetail'), $pack);
-        $send = $this->gamed->SendToGamedBD($pack);
-        $data = $this->gamed->deleteHeader($send);
-        return $this->gamed->unmarshal($data, config('FactionFortressDetail'));*/
     }
 
     public function getTerritories()
@@ -588,11 +583,19 @@ class API
         return $skills;
     }
 
+    /**
+     * Check if server is Online
+     * @return boolean
+     */
     public function serverOnline()
     {
         return @fsockopen( settings( 'server_ip', '127.0.0.1' ), config( 'pw-api.ports.client' ), $errCode, $errStr, 1 ) ? TRUE : FALSE;
     }
 
+    /**
+     * Check if ports is Online
+     * @return array
+     */
     public function ports()
     {
         $ports = [];
@@ -603,5 +606,25 @@ class API
             $ports[$name]['open'] = @fsockopen( settings( 'server_ip', '127.0.0.1' ), $port, $errCode, $errStr, 1 ) ? TRUE : FALSE;
         }
         return $ports;
+    }
+
+    /**
+     * Check if Role is Online
+     * @params int $roleid
+     * @return boolean
+     */
+    public function checkRoleOnline( $role )
+    {
+        $result = false;
+        $totalOnline = $this->getOnlineList();
+
+        foreach( $totalOnline as $online )
+        {
+            if ( $online['roleid'] === $role )
+            {
+                $result = true;
+            }
+        }
+        return $result;
     }
 }

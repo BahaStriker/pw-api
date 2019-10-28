@@ -29,6 +29,7 @@ $PROTOCOL = array(
 		'getFactionDetail' => 4608,
 		'FactionUpgrade' => 4610,
 		'GFactionFortressDetail' => 4404,
+		'GetCashTotal' => 3058,
 	),
 	'role' => array(
 		'base' => array(
@@ -488,5 +489,8 @@ $PROTOCOL = array(
 		'delayexpel' => 'octets',
 		'extend' => 'octets',
 		'nickname' => 'name',
+	),
+	'getCashTotal' => array(
+		'cash_total' => 'int'
 	),
 );

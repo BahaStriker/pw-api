@@ -5,7 +5,7 @@ namespace Striker\PerfectWorldAPI;
 /**
  * Class Gamed
  *
- * @package Striker/pw-api
+ * @package ham/pw-api
  */
 class Gamed
 {
@@ -270,7 +270,6 @@ class Gamed
         }
         else
         {
-            //flash()->error( trans( 'pw-api-messages.server_connect_failed' ) );
             return FALSE;
         }
     }

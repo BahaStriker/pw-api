@@ -33,7 +33,7 @@ $PROTOCOL = array(
 	),
 	'role' => array(
 		'base' => array(
-			'bversion' => 'byte',
+			'version' => 'byte',
 			'id' => 'int' ,
 			'name' => 'name',
 			'race' => 'int',
@@ -56,7 +56,10 @@ $PROTOCOL = array(
 			'help_states' => 'octets',
 			'spouse' => 'int',
 			'userid' => 'int',
-			'reserved1' => 'int'
+			'cross_data' => 'octets',
+			'reserved2' => 'byte',
+			'reserved3' => 'byte',
+			'reserved4' => 'byte',
 		),
 		'status' => array(
 			'sversion' => 'byte',
@@ -102,8 +105,14 @@ $PROTOCOL = array(
 			'online_award' => 'octets',
 			'profit_time_data' => 'octets',
 			'country_data' => 'octets',
-			'reserved4' => 'int',
-			'reserved5' => 'int',
+			'king_data' => 'octets',
+			'meridian_data' => 'octets',
+			'extraprop' => 'octets',
+			'title_data' => 'octets',
+			'reincarnation_data' => 'octets',
+			'realm_data' => 'octets',
+			'reserved2' => 'byte',
+			'reserved3' => 'byte',
 		),
 		'pocket' => array(
 			'icapacity' => 'int',
@@ -184,7 +193,21 @@ $PROTOCOL = array(
 				'guid2' => 'int',
 				'mask' => 'int'
 			),
-			'reserved' => 'int',
+			'size3' => 'byte',
+			'generalcardcount' => 'cuint',
+			'generalcard' => array(
+				'id' => 'int',
+				'pos' => 'int',
+				'count' => 'int',
+				'max_count' => 'int',
+				'data' => 'octets',
+				'proctype' => 'int',
+				'expire_date' => 'int',
+				'guid1' => 'int',
+				'guid2' => 'int',
+				'mask' => 'int'
+			),
+			'reserved' => 'short',
 		),
 		'task' => array(
 			'task_data' => 'octets',
@@ -239,13 +262,13 @@ $PROTOCOL = array(
 			'damage_magic_high' => 'lint',
 			'defense' => 'lint',
 			'resistance' => array(
-				1 => 'lint',
-				2 => 'lint',
-				3 => 'lint',
-				4 => 'lint',
-				5 => 'lint'
+				1 => 'int',
+				2 => 'int',
+				3 => 'int',
+				4 => 'int',
+				5 => 'int'
 			),
- 			'attack' => 'lint',
+			'attack' => 'lint',
 			'armor' => 'lint',
 			'attack_speed' => 'lint',
 			'run_speed' => 'lint',
@@ -270,6 +293,14 @@ $PROTOCOL = array(
 			'consume_contrib' => 'lint',
 			'exp_contrib' => 'lint',
 			'cumulate_contrib' => 'lint',
+		),
+		'title_data' => array(
+			'cur_title_id' => 'lshort',
+			/*'titlecount' => 'cuint',
+			'unk1' => 'lshort',
+			'title' => array(
+				'title_id' => 'short',
+			),*/
 		),
 	),
 	'user' => array(
@@ -384,7 +415,9 @@ $PROTOCOL = array(
 			'online_status' => 'byte',
 			'name' => 'name',
 			'nickname' => 'name',
-			'contrib' => 'int'
+			'contrib' => 'int',
+			'delayexpel' => 'byte',
+			'expeltime' => 'int',
 		),
 		'last_op_time' => 'int',
 		'alliancecount' => 'cuint',
@@ -478,11 +511,13 @@ $PROTOCOL = array(
 		'fid' => 'int',
 		'cls' => 'byte',
 		'role' => 'byte',
-		'reserved' => 'byte',
+		'delayexpel' => 'octets',
 		'extend' => 'octets',
 		'nickname' => 'name',
 	),
 	'getCashTotal' => array(
-		'cash_total' => 'int'
+		'cash_total' => 'int',
+		'cash_vip_score_add' => 'int',
+		'cash_vip_level' => 'int'
 	),
 );

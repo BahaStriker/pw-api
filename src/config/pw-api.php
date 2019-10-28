@@ -24,7 +24,7 @@ return [
     /**
      * Your game version
      *
-     * Available versions: 07, 63, 69, 70, 80, 85, 88, 101
+     * Available versions: 07, 63, 69, 70, 80, 85, 88, 101, 145, 156
      *
      * @var int
      */

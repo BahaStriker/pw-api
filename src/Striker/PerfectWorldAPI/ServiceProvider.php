@@ -1,4 +1,6 @@
-<?php namespace Striker\PerfectWorldAPI;
+<?php 
+
+namespace Striker\PerfectWorldAPI;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
