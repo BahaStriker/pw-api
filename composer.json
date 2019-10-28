@@ -1,7 +1,7 @@
 {
     "name": "bahastriker/pw-api",
     "description": "A package to retrieve data from a Perfect World game server",
-    "type": "project",
+    
     "require": {
         "php": ">=5.6"
     },
