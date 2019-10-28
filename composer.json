@@ -1,0 +1,21 @@
+{
+  "name": "BahaStriker/pw-api",
+  "description": "A package to retrieve data from a Perfect World game server",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Baha Striker",
+      "email": "striker@nexuspw.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "efriandika/laravel-settings": "^1.1"
+  },
+  "autoload": {
+    "psr-0" : {
+      "Striker\\PerfectWorldAPI" : "src/"
+    }
+  },
+  "minimum-stability": "stable"
+}
